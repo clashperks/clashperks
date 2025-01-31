@@ -266,6 +266,9 @@ export const command = {
         limit: {
           description: 'Limit the number of results.'
         },
+        offset: {
+          description: 'Offset the number of results.'
+        },
         enable_auto_updating: {
           description: 'Enable auto updating (every 30-60 mins)'
         }

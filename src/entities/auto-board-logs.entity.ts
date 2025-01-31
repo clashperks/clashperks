@@ -9,6 +9,7 @@ export interface AutoBoardLogsEntity {
   boardType: string;
   color: number | null;
   limit: number;
+  offset: number;
   messageId: string;
   updatedAt: Date;
   createdAt: Date;

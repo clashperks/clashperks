@@ -33,6 +33,7 @@ export default class LegendLeaderboardCommand extends Command {
       sort_by?: string;
       export?: boolean;
       limit?: number;
+      offset?: number;
       export_disabled?: boolean;
       is_bb?: boolean;
       enable_auto_updating?: string;
@@ -55,6 +56,7 @@ export default class LegendLeaderboardCommand extends Command {
           guild: interaction.guild,
           sort_by: args.sort_by,
           limit: args.limit,
+          offset: args.offset,
           seasonId,
           clanTags: clans.map((clan) => clan.tag)
         })
@@ -62,6 +64,7 @@ export default class LegendLeaderboardCommand extends Command {
           guild: interaction.guild,
           sort_by: args.sort_by,
           limit: args.limit,
+          offset: args.offset,
           seasonId,
           clanTags: clans.map((clan) => clan.tag)
         });
@@ -75,7 +78,7 @@ export default class LegendLeaderboardCommand extends Command {
         channelId: interaction.channelId,
         boardType: args.enable_auto_updating,
         guild: interaction.guild,
-        props: { limit: args.limit }
+        props: { limit: args.limit, offset: args.offset }
       });
       return interaction.editReply('Successfully enabled auto updating Leaderboard.');
     }
@@ -85,6 +88,7 @@ export default class LegendLeaderboardCommand extends Command {
       clans: resolvedArgs,
       sort_by: args.sort_by,
       limit: args.limit,
+      offset: args.offset,
       is_bb: args.is_bb,
       season: args.season && args.season !== Season.ID ? args.season : null,
       export_disabled: args.export_disabled

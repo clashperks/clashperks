@@ -13,12 +13,14 @@ export const getLegendRankingEmbedMaker = async ({
   guild,
   sort_by,
   limit,
+  offset,
   seasonId
 }: {
   guild: Guild;
   clanTags?: string[];
   sort_by?: string;
   limit?: number;
+  offset?: number;
   seasonId: string;
 }) => {
   const client = container.resolve(Client);
@@ -71,11 +73,13 @@ export const getLegendRankingEmbedMaker = async ({
     players.sort((a, b) => b.trophies - a.trophies);
   }
 
-  if (limit) players = players.slice(0, limit);
+  offset = offset || 0;
+  limit = (limit || 50) + offset;
+  players = players.slice(offset, limit);
 
   const embed = new EmbedBuilder();
   embed.setColor(client.embed(guild.id));
-  embed.setAuthor({ name: `${guild.name} Legend Leaderboard (${moment(seasonId).format('MMM YYYY')})`, iconURL: guild.iconURL()! });
+  embed.setAuthor({ name: `Legend Leaderboard (${moment(seasonId).format('MMM YYYY')})`, iconURL: guild.iconURL()! });
   embed.setFooter({ text: 'Synced' });
   embed.setTimestamp();
 
@@ -89,7 +93,7 @@ export const getLegendRankingEmbedMaker = async ({
           const attacks = padStart(player.attackWins, 3);
           const name = escapeBackTick(player.name);
           const townHall = padStart(player.townHallLevel, 2);
-          return `\u200e${padStart(n + 1, 2)}  ${townHall}  ${trophies}  ${attacks}  ${name}`;
+          return `\u200e${padStart(offset + n + 1, 2)}  ${townHall}  ${trophies}  ${attacks}  ${name}`;
         }),
         '```'
       ].join('\n')
@@ -102,7 +106,7 @@ export const getLegendRankingEmbedMaker = async ({
         .slice(0, 50)
         .map((player, idx) => {
           const name = escapeMarkdown(`${player.name}${player.clan ? ` | ${player.clan.name}` : ''}`);
-          return `${BLUE_NUMBERS[idx + 1]} \`${player.trophies}\` \u200b \u200e${name}`;
+          return `${BLUE_NUMBERS[offset + idx + 1]} \`${player.trophies}\` \u200b \u200e${name}`;
         })
         .join('\n')
     );
@@ -115,12 +119,14 @@ export const getBbLegendRankingEmbedMaker = async ({
   clanTags,
   guild,
   limit,
+  offset,
   seasonId
 }: {
   guild: Guild;
   clanTags?: string[];
   sort_by?: string;
   limit?: number;
+  offset?: number;
   seasonId: string;
 }) => {
   const client = container.resolve(Client);
@@ -161,25 +167,28 @@ export const getBbLegendRankingEmbedMaker = async ({
   });
 
   players = players.filter((player) => player.trophies >= 5000);
-
   players.sort((a, b) => b.trophies - a.trophies);
-  if (limit) players = players.slice(0, limit);
+
+  offset = offset || 0;
+  limit = (limit || 50) + offset;
+  players = players.slice(offset, limit);
 
   const embed = new EmbedBuilder();
   embed.setColor(client.embed(guild.id));
   embed.setAuthor({
-    name: `${guild.name} Builder Base Leaderboard (${moment(seasonId).format('MMM YYYY')})`,
+    name: `Builder Base Leaderboard (${moment(seasonId).format('MMM YYYY')})`,
     iconURL: guild.iconURL()!
   });
   embed.setFooter({ text: 'Synced' });
   embed.setTimestamp();
+
   if (players.length) {
     embed.setDescription(
       players
         .slice(0, 50)
         .map((player, idx) => {
           const name = escapeMarkdown(`${player.name}${player.clan ? ` | ${player.clan.name}` : ''}`);
-          return `${BLUE_NUMBERS[idx + 1]} \`${player.trophies}\` \u200b \u200e${name}`;
+          return `${BLUE_NUMBERS[offset + idx + 1]} \`${player.trophies}\` \u200b \u200e${name}`;
         })
         .join('\n')
     );

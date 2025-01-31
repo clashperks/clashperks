@@ -3906,6 +3906,14 @@ export const COMMANDS: RESTPostAPIApplicationCommandsJSONBody[] = [
             min_value: 3
           },
           {
+            name: 'offset',
+            description: command.legend.leaderboard.options.offset.description,
+            description_localizations: translation('command.legend.leaderboard.options.offset.description'),
+            type: ApplicationCommandOptionType.Number,
+            max_value: 100,
+            min_value: 3
+          },
+          {
             name: 'season',
             description: common.options.season.description,
             description_localizations: translation('common.options.season.description'),
